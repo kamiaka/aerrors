@@ -52,7 +52,7 @@ func ExampleErrorf_with_wrapped_error() {
 
 func ExampleErr_New() {
 	appError := New("app error")
-	err := appError.New("oops", Priority(Info))
+	err := appError.New("oops")
 
 	fmt.Println(err)
 	fmt.Println(err.Parent())
