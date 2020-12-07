@@ -190,21 +190,21 @@ func UTCTime(l string, v time.Time) *Value {
 }
 
 // DefaultStackDepth is the depth used when call Stack.
-var DefaultStackDepth = 32
+var DefaultStackDepth = 16
 
 // Stack returns Value of stack trace.
 // depth is determined by DefaultStackDepth.
-func Stack() *Value {
+func Stack(skip int) *Value {
 	return &Value{
 		Label: "stack",
-		Value: stack.Callers(DefaultStackDepth, 1).String(),
+		Value: stack.Callers(DefaultStackDepth, skip+1).String(),
 	}
 }
 
 // StackN returns Value of stack trace for N layers.
-func StackN(depth int) *Value {
+func StackN(depth, skip int) *Value {
 	return &Value{
 		Label: "stack",
-		Value: stack.Callers(depth, 1).String(),
+		Value: stack.Callers(depth, skip+1).String(),
 	}
 }

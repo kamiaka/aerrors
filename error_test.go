@@ -8,7 +8,7 @@ import (
 func ExampleNew() {
 	err := New("new error")
 
-	fmt.Println(err)
+	fmt.Println(err.Error())
 	// Output:
 	// new error
 }
@@ -44,24 +44,46 @@ func ExampleErrorf_with_wrapped_error() {
 	err := Errorf("wrap error: %w", origin)
 
 	fmt.Println(err)
+	fmt.Println(err.Unwrap())
 	// Output:
 	// wrap error: oops
+	// oops
 }
 
 func ExampleErr_New() {
-	apiError := New("api error")
-	err := apiError.New("oops")
+	appError := New("app error")
+	err := appError.New("oops", Priority(Info))
 
 	fmt.Println(err)
 	fmt.Println(err.Parent())
 	// Output:
 	// oops
-	// api error
+	// app error
+}
+
+func ExampleErr_New_withOption() {
+	appError := New("app error")
+	err := appError.New("oops", Priority(Info))
+
+	fmt.Println(err.Priority())
+	fmt.Println(err.Parent().Priority())
+	// Output:
+	// Info
+	// Error
+}
+
+func ExampleErr_Errorf() {
+	appError := New("app error")
+	err := appError.Errorf("error: %d", 42)
+
+	fmt.Println(err)
+	// Output:
+	// error: 42
 }
 
 func ExampleErr_Wrap() {
-	apiError := New("api error")
-	err := apiError.Wrap(errors.New("oops"))
+	appError := New("app error")
+	err := appError.Wrap(errors.New("oops"))
 
 	fmt.Println(err)
 	// Output:
@@ -79,12 +101,56 @@ func ExampleErr_Is() {
 	fmt.Printf("friped: %v\n", errors.Is(parent, err))
 	fmt.Printf("other: %v\n", errors.Is(err, other))
 	fmt.Printf("other child: %v\n", errors.Is(err, otherChild))
-	fmt.Printf("clone: %v\n", errors.Is(err, err.Clone()))
 	// Output:
 	// err: true
 	// parent: true
 	// friped: false
 	// other: false
 	// other child: false
-	// clone: false
+}
+
+func ExampleErr_WithValue() {
+	err := New("new error").WithValue(String("str", "Foo"), Bool("bool", true))
+
+	for _, v := range err.Values() {
+		fmt.Printf("%s: %s\n", v.Label, v.Value)
+	}
+	// Output:
+	// str: Foo
+	// bool: true
+}
+
+func ExampleErr_Callers() {
+	err := New("new error")
+	f := err.Callers()
+	for {
+		frame, more := f.Next()
+		fmt.Println(frame.Function)
+		if !more {
+			break
+		}
+	}
+
+	// Output:
+	// github.com/kamiaka/aerrors.ExampleErr_Callers
+}
+
+func ExampleErr_WithPriority() {
+	err := New("new error")
+	fmt.Println(err.Priority())
+
+	err.WithPriority(Info)
+	fmt.Println(err.Priority())
+
+	// Output:
+	// Error
+	// Info
+}
+
+func ExampleErr_Config() {
+	err := New("new error")
+
+	fmt.Println(err.Config().CallerDepth)
+	// Output:
+	// 1
 }

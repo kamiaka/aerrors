@@ -3,7 +3,7 @@ package aerrors
 import "fmt"
 
 // ErrorPriority is error priority.
-// Smaller value is high priority.
+// Smaller value is higher priority.
 type ErrorPriority int
 
 // Built in priorities.

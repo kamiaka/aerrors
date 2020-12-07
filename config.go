@@ -9,19 +9,19 @@ type Config struct {
 	// It is called by (*Err).FormatError.
 	FormatError ErrorFormatter
 
-	// Depth of callers.
-	Depth int
+	// CallerDepth .
+	CallerDepth int
 
-	// Skip callers count.
-	Skip int
+	// CallerSkip.
+	CallerSkip int
 }
 
 // DefaultConfig for create *Err
 var DefaultConfig = &Config{
 	Priority:    Error,
-	Depth:       1,
-	Skip:        0,
 	FormatError: NewFormatter("\n", ": "),
+	CallerDepth: 1,
+	CallerSkip:  0,
 }
 
 // Clone *Config.

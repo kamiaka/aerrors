@@ -67,7 +67,7 @@ func TestValue_generators(t *testing.T) {
 		},
 		{
 			value: func() *Value {
-				return Stack()
+				return Stack(0)
 			}(),
 			want: &Value{
 				Label: "stack",
@@ -76,7 +76,7 @@ func TestValue_generators(t *testing.T) {
 		},
 		{
 			value: func() *Value {
-				return StackN(1)
+				return StackN(1, 0)
 			}(),
 			want: &Value{
 				Label: "stack",

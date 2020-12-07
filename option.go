@@ -1,32 +1,36 @@
 package aerrors
 
 // Option for create error `*Err`.
-type Option func(*Config)
+type Option func(*Config) *Config
 
 // Priority option configures error priority.
 func Priority(p ErrorPriority) Option {
-	return func(c *Config) {
+	return func(c *Config) *Config {
 		c.Priority = p
+		return c
 	}
 }
 
-// Depth option configures callers depth.
-func Depth(n int) Option {
-	return func(c *Config) {
-		c.Depth = n
+// CallerDepth option configures callers depth.
+func CallerDepth(n int) Option {
+	return func(c *Config) *Config {
+		c.CallerDepth = n
+		return c
 	}
 }
 
-// Skip option configures callers skip.
-func Skip(n int) Option {
-	return func(c *Config) {
-		c.Skip = n
+// CallerSkip option configures callers skip.
+func CallerSkip(n int) Option {
+	return func(c *Config) *Config {
+		c.CallerSkip = n
+		return c
 	}
 }
 
 // Formatter option configures error formatter.
 func Formatter(f ErrorFormatter) Option {
-	return func(c *Config) {
+	return func(c *Config) *Config {
 		c.FormatError = f
+		return c
 	}
 }

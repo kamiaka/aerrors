@@ -16,6 +16,8 @@ type Err struct {
 	parent       *Err
 	wrappedError error
 	callers      *stack.Frames
+	priority     ErrorPriority
+	formatError  ErrorFormatter
 	values       []*Value
 }
 
@@ -23,13 +25,15 @@ type Err struct {
 func New(msg string, opts ...Option) *Err {
 	conf := DefaultConfig.Clone()
 	for _, opt := range opts {
-		opt(conf)
+		conf = opt(conf)
 	}
 
 	return &Err{
-		config:  conf,
-		msg:     msg,
-		callers: stack.Callers(conf.Depth, conf.Skip+1),
+		config:      conf,
+		msg:         msg,
+		callers:     stack.Callers(conf.CallerDepth, conf.CallerSkip+1),
+		priority:    conf.Priority,
+		formatError: conf.FormatError,
 	}
 }
 
@@ -38,10 +42,14 @@ func New(msg string, opts ...Option) *Err {
 // If the format specifier has suffix `: %w` verb with an error operand, the returned error will implement an Unwrap method returning the operand.
 func Errorf(format string, args ...interface{}) *Err {
 	format, wrappedError := wrappedFormat(format, args)
+	conf := DefaultConfig.Clone()
+
 	return &Err{
-		config:       DefaultConfig,
+		config:       conf,
 		msg:          fmt.Sprintf(format, args...),
-		callers:      stack.Callers(DefaultConfig.Depth, DefaultConfig.Skip),
+		callers:      stack.Callers(conf.CallerDepth, conf.CallerSkip+1),
+		priority:     conf.Priority,
+		formatError:  conf.FormatError,
 		wrappedError: wrappedError,
 	}
 }
@@ -62,23 +70,24 @@ func (e *Err) Error() string {
 	return e.msg
 }
 
-// Clone returns copy of the receiver `e`.
-func (e *Err) Clone() *Err {
+func (e *Err) clone() *Err {
 	clone := *e
 	return &clone
 }
 
 func (e *Err) newChild(msg string, opts ...Option) *Err {
-	child := e.Clone()
-	conf := e.config.Clone()
+	child := e.clone()
 
+	conf := e.config.Clone()
 	for _, opt := range opts {
-		opt(conf)
+		conf = opt(conf)
 	}
 
 	child.msg = msg
-	child.callers = stack.Callers(conf.Depth, conf.Skip+2)
+	child.callers = stack.Callers(conf.CallerDepth, conf.CallerSkip+2)
 	child.parent = e
+	child.priority = conf.Priority
+	child.formatError = conf.FormatError
 
 	return child
 }
@@ -93,8 +102,8 @@ func (e *Err) New(msg string, options ...Option) *Err {
 // Errorf returns new child *Err with message.
 func (e *Err) Errorf(format string, args ...interface{}) *Err {
 	format, wrappedError := wrappedFormat(format, args)
-	child := e.newChild(fmt.Sprintf(format, args...))
 
+	child := e.newChild(fmt.Sprintf(format, args...))
 	child.wrappedError = wrappedError
 
 	return child
@@ -124,7 +133,7 @@ func (e *Err) Format(s fmt.State, verb rune) {
 
 // FormatError implements interface `xerrors.Formatter`
 func (e *Err) FormatError(p xerrors.Printer) (next error) {
-	e.config.FormatError(p, e)
+	e.formatError(p, e)
 	if p.Detail() {
 		return e.wrappedError
 	}
@@ -136,8 +145,8 @@ func (e *Err) Parent() *Err {
 	return e.parent
 }
 
-// With sets the `values` and returns receiver.
-func (e *Err) With(values ...*Value) *Err {
+// WithValue sets the `values` and returns receiver.
+func (e *Err) WithValue(values ...*Value) *Err {
 	e.values = append(e.values, values...)
 	return e
 }
@@ -154,11 +163,16 @@ func (e *Err) Callers() *runtime.Frames {
 
 // Priority returns error priority.
 func (e *Err) Priority() ErrorPriority {
-	return e.config.Priority
+	return e.priority
 }
 
 // WithPriority sets error priority and returns receiver.
 func (e *Err) WithPriority(p ErrorPriority) *Err {
-	e.config.Priority = p
+	e.priority = p
 	return e
+}
+
+// Config returns aerror's config.
+func (e *Err) Config() *Config {
+	return e.config
 }

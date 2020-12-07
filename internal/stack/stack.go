@@ -22,6 +22,7 @@ func Callers(depth, skip int) *Frames {
 	}
 }
 
+// Format frames to string by specified separators.
 func (f *Frames) Format(sep, funcSep, lineSep string) string {
 	var b bytes.Buffer
 	inMore := false
