@@ -1,6 +1,6 @@
 # aerrors
 
-[![GoDoc](https://godoc.org/github.com/kamiaka/aerrors?status.svg)](https://godoc.org/github.com/kamiaka/aerrors)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kamiaka/aerrors.svg)](https://pkg.go.dev/github.com/kamiaka/aerrors)
 
 Aerrors is package for Golang augmented errors.
 
@@ -37,7 +37,7 @@ fmt.Printf("%+v", err)
 // Output:
 // new error:
 //     priority: Error
-//     callers: main.main:example/main.go:10
+//     callers: main.main:<GOPATH>example/main.go:10
 ```
 
 Can also add more information.
@@ -86,6 +86,14 @@ fmt.Println(err)
 //     origin: oops
 //     callers: main.main:example/main.go:12
 //   - oops
+```
+
+### Trim GOPATH from callers and stack traces
+
+Use `--trimpath` option.
+
+```sh
+go build --trimpath
 ```
 
 ## License

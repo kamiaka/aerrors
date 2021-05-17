@@ -34,7 +34,7 @@ func (f *Frames) Format(sep, funcSep, lineSep string) string {
 		if inMore {
 			b.WriteString(sep)
 		}
-		b.WriteString(simpleFunc(frame.Function) + funcSep + trimGOPATH(frame.Function, frame.File) + lineSep + strconv.Itoa(frame.Line))
+		b.WriteString(simpleFunc(frame.Function) + funcSep + frame.File + lineSep + strconv.Itoa(frame.Line))
 		if more {
 			inMore = true
 			continue
