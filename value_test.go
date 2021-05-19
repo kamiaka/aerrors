@@ -38,6 +38,13 @@ func TestValue_generators(t *testing.T) {
 			},
 		},
 		{
+			value: Stringf("stringer", "formatted: %d", 42),
+			want: &Value{
+				Label: "stringer",
+				Value: "formatted: 42",
+			},
+		},
+		{
 			value: Bool("bool", true),
 			want: &Value{
 				Label: "bool",

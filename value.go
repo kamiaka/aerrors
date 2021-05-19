@@ -43,6 +43,14 @@ func Stringer(l string, v interface{ String() string }) *Value {
 	}
 }
 
+// Stringf returns formatted string Value.
+func Stringf(l string, v string, args ...interface{}) *Value {
+	return &Value{
+		Label: l,
+		Value: fmt.Sprintf(v, args...),
+	}
+}
+
 // Bool returns Value.
 func Bool(l string, v bool) *Value {
 	var s string
