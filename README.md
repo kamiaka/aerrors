@@ -37,7 +37,7 @@ fmt.Printf("%+v", err)
 // Output:
 // new error:
 //     priority: Error
-//     callers: main.main:<GOPATH>example/main.go:10
+//     callers: main.main:path/to/example/main.go:10
 ```
 
 Can also add more information.
@@ -52,7 +52,7 @@ fmt.Printf("%+v", err)
 // Output:
 // new error:
 //     priority: Error
-//     callers: main.main:example/main.go:10
+//     callers: main.main:path/to/example/main.go:10
 //     foo: Foo
 //     number: 42
 ```
@@ -84,13 +84,13 @@ fmt.Println(err)
 //     priority: Error
 //     parent: application error
 //     origin: oops
-//     callers: main.main:example/main.go:12
+//     callers: main.main:path/to/example/main.go:12
 //   - oops
 ```
 
 ### Trim GOPATH from callers and stack traces
 
-Use `--trimpath` option.
+Use `--trimpath` option. (see, [Command go](https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies))
 
 ```sh
 go build --trimpath
