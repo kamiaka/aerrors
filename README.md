@@ -83,7 +83,6 @@ fmt.Println(err)
 // error: oops:
 //     priority: Error
 //     parent: application error
-//     origin: oops
 //     callers: main.main:path/to/example/main.go:12
 //   - oops
 ```
