@@ -30,7 +30,6 @@ func ExampleNew_childVerbose() {
 	// Output:
 	// new error: oops:
 	//     priority: Error
-	//     origin: oops
 	//     callers: aerrors.ExampleNew_childVerbose:github.com/kamiaka/aerrors/error_test.go:27
 	//   - oops:
 	//     priority: Error

@@ -21,9 +21,6 @@ func NewFormatter(sep, labelSep string) ErrorFormatter {
 				p.Print(sep, "parent", labelSep, parent.msg)
 				parent = parent.parent
 			}
-			if e.wrappedError != nil {
-				p.Print(sep, "origin", labelSep, e.wrappedError.Error())
-			}
 			p.Print(sep, "callers", labelSep, e.callers.String())
 			for _, v := range e.values {
 				p.Print(sep, v.Label, labelSep, v.Value)
