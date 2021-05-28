@@ -120,6 +120,19 @@ func (ls Values) Byte(l string, v byte) Values {
 	return append(ls, Byte(l, v))
 }
 
+// Rune returns Value.
+func Rune(l string, v rune) *Value {
+	return &Value{
+		Label: l,
+		Value: string(v),
+	}
+}
+
+// Rune appends rune Value and return Values.
+func (ls Values) Rune(l string, v rune) Values {
+	return append(ls, Rune(l, v))
+}
+
 // Int returns Value.
 func Int(l string, v int) *Value {
 	return &Value{
