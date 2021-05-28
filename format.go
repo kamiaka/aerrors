@@ -12,9 +12,14 @@ func NewFormatter(sep, labelSep string) ErrorFormatter {
 	return func(p xerrors.Printer, e *Err) (next error) {
 		p.Print(e.msg)
 		if p.Detail() {
-			p.Print(sep, "priority", labelSep, e.config.Priority)
-			if e.parent != nil {
-				p.Print(sep, "parent", labelSep, e.parent.msg)
+			p.Print(sep, "priority", labelSep, e.priority)
+			parent := e.parent
+			for {
+				if parent == nil {
+					break
+				}
+				p.Print(sep, "parent", labelSep, parent.msg)
+				parent = parent.parent
 			}
 			if e.wrappedError != nil {
 				p.Print(sep, "origin", labelSep, e.wrappedError.Error())
