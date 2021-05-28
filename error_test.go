@@ -23,6 +23,20 @@ func ExampleNew_verbose() {
 	//     callers: aerrors.ExampleNew_verbose:github.com/kamiaka/aerrors/error_test.go:17
 }
 
+func ExampleNew_childVerbose() {
+	err := Errorf("new error: %w", New("oops"))
+
+	fmt.Printf("%+v", err)
+	// Output:
+	// new error: oops:
+	//     priority: Error
+	//     origin: oops
+	//     callers: aerrors.ExampleNew_childVerbose:github.com/kamiaka/aerrors/error_test.go:27
+	//   - oops:
+	//     priority: Error
+	//     callers: aerrors.ExampleNew_childVerbose:github.com/kamiaka/aerrors/error_test.go:27
+}
+
 func ExampleNew_with_options() {
 	err := New("new error", Priority(Emergency))
 
@@ -86,7 +100,9 @@ func ExampleErr_Wrap() {
 	err := appError.Wrap(errors.New("oops"))
 
 	fmt.Println(err)
+	fmt.Println(err.Unwrap())
 	// Output:
+	// app error
 	// oops
 }
 
@@ -150,7 +166,7 @@ func ExampleErr_WithPriority() {
 func ExampleErr_Config() {
 	err := New("new error")
 
-	fmt.Println(err.Config().CallerDepth)
+	fmt.Println(err.ChildConfig().callerDepth)
 	// Output:
 	// 1
 }
