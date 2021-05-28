@@ -45,7 +45,7 @@ func (f *Frames) Format(sep, funcSep, lineSep string) string {
 	return b.String()
 }
 
-// String returns string.
+// String returns formatted string.
 //   e.g., pkg(.Type).Func:path/to/file.go:line, ...
 func (f *Frames) String() string {
 	return f.Format(", ", ":", ":")
