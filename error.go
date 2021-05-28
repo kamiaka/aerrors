@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/kamiaka/aerrors/internal/stack"
 	"golang.org/x/xerrors"
@@ -203,5 +204,143 @@ func (e *Err) ChildConfig() *Config {
 // WithChildConfig sets *Config for new child and receiver.
 func (e *Err) WithChildConfig(c *Config) *Err {
 	e.childConf = c
+	return e
+}
+
+// WithString appends string Value and returns receiver.
+func (e *Err) WithString(l, v string) *Err {
+	e.values = append(e.values, String(l, v))
+	return e
+}
+
+// WithStringer appends stringer Value and returns receiver.
+func (e *Err) WithStringer(l string, v interface{ String() string }) *Err {
+	e.values = append(e.values, Stringer(l, v))
+	return e
+}
+
+// WithStringf appends formatted string Value and returns receiver.
+func (e *Err) WithStringf(l string, format string, args ...interface{}) *Err {
+	e.values = append(e.values, Stringf(l, format, args...))
+	return e
+}
+
+// WithBool appends bool Value and returns receiver.
+func (e *Err) WithBool(l string, v bool) *Err {
+	e.values = append(e.values, Bool(l, v))
+	return e
+}
+
+// WithBytes appends bytes Value and returns receiver.
+func (e *Err) WithBytes(l string, v []byte) *Err {
+	e.values = append(e.values, Bytes(l, v))
+	return e
+}
+
+// WithByte appends byte Value and returns receiver.
+func (e *Err) WithByte(l string, v byte) *Err {
+	e.values = append(e.values, Byte(l, v))
+	return e
+}
+
+// WithRune appends rune Value and returns receiver.
+func (e *Err) WithRune(l string, v rune) *Err {
+	e.values = append(e.values, Rune(l, v))
+	return e
+}
+
+// WithInt appends int Value and returns receiver.
+func (e *Err) WithInt(l string, v int) *Err {
+	e.values = append(e.values, Int(l, v))
+	return e
+}
+
+// WithInt8 appends Int8 Value and returns receiver.
+func (e *Err) WithInt8(l string, v int8) *Err {
+	e.values = append(e.values, Int8(l, v))
+	return e
+}
+
+// WithInt16 appends Int16 Value and returns receiver.
+func (e *Err) WithInt16(l string, v int16) *Err {
+	e.values = append(e.values, Int16(l, v))
+	return e
+}
+
+// WithInt32 appends Int32 Value and returns receiver.
+func (e *Err) WithInt32(l string, v int32) *Err {
+	e.values = append(e.values, Int32(l, v))
+	return e
+}
+
+// WithInt64 appends Int64 Value and returns receiver.
+func (e *Err) WithInt64(l string, v int64) *Err {
+	e.values = append(e.values, Int64(l, v))
+	return e
+}
+
+// WithUint appends Uint Value and returns receiver.
+func (e *Err) WithUint(l string, v uint) *Err {
+	e.values = append(e.values, Uint(l, v))
+	return e
+}
+
+// WithUint8 appends Uint8 Value and returns receiver.
+func (e *Err) WithUint8(l string, v uint8) *Err {
+	e.values = append(e.values, Uint8(l, v))
+	return e
+}
+
+// WithUint16 appends Uint16 Value and returns receiver.
+func (e *Err) WithUint16(l string, v uint16) *Err {
+	e.values = append(e.values, Uint16(l, v))
+	return e
+}
+
+// WithUint32 appends Uint32 Value and returns receiver.
+func (e *Err) WithUint32(l string, v uint32) *Err {
+	e.values = append(e.values, Uint32(l, v))
+	return e
+}
+
+// WithUint64 appends Uint64 Value and returns receiver.
+func (e *Err) WithUint64(l string, v uint64) *Err {
+	e.values = append(e.values, Uint64(l, v))
+	return e
+}
+
+// WithFloat32 appends Float32 Value and returns receiver.
+func (e *Err) WithFloat32(l string, v float32) *Err {
+	e.values = append(e.values, Float32(l, v))
+	return e
+}
+
+// WithFloat64 appends Float64 Value and returns receiver.
+func (e *Err) WithFloat64(l string, v float64) *Err {
+	e.values = append(e.values, Float64(l, v))
+	return e
+}
+
+// WithTime appends Time Value and returns receiver.
+func (e *Err) WithTime(l string, v time.Time) *Err {
+	e.values = append(e.values, Time(l, v))
+	return e
+}
+
+// WithUTCTime appends UTCTime Value and returns receiver.
+func (e *Err) WithUTCTime(l string, v time.Time) *Err {
+	e.values = append(e.values, UTCTime(l, v))
+	return e
+}
+
+// WithStack appends Stack Value and returns receiver.
+func (e *Err) WithStack(skip int) *Err {
+	e.values = append(e.values, Stack(skip))
+	return e
+}
+
+// WithStackN appends Stack Value and returns receiver.
+func (e *Err) WithStackN(depth, skip int) *Err {
+	e.values = append(e.values, StackN(depth, skip+1))
 	return e
 }
