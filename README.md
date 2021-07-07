@@ -89,10 +89,10 @@ fmt.Println(err)
 
 ### Trim GOPATH from callers and stack traces
 
-Use `--trimpath` option. (see, [Command go](https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies))
+Use `-trimpath` option. (see, [Command go](https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies))
 
 ```sh
-go build --trimpath
+go build -trimpath
 ```
 
 ## License
