@@ -335,7 +335,7 @@ func (e *Err) WithUTCTime(l string, v time.Time) *Err {
 
 // WithStack appends Stack Value and returns receiver.
 func (e *Err) WithStack(skip int) *Err {
-	e.values = append(e.values, Stack(skip))
+	e.values = append(e.values, Stack(skip+1))
 	return e
 }
 
