@@ -67,7 +67,7 @@ func errorf(conf *Config, format string, args ...interface{}) *Err {
 func wrappedFormat(format string, args []interface{}) (newFormat string, wrappedError error) {
 	isWrapped := strings.HasSuffix(format, ": %w")
 	if isWrapped && len(args) > 0 {
-		format = string(append([]byte(format)[:len(format)-4])) + ": %v"
+		format = string([]byte(format)[:len(format)-4]) + ": %v"
 		if e, ok := args[len(args)-1].(error); ok {
 			wrappedError = e
 		}
@@ -88,7 +88,7 @@ func (e *Err) clone() *Err {
 func (e *Err) newChild(msg string, opts ...Option) *Err {
 	child := e.clone()
 
-	conf := e.childConf.Clone().WithCallerSkip(0)
+	conf := e.childConf.Clone()
 	for _, opt := range opts {
 		conf = opt(conf)
 	}
@@ -150,11 +150,11 @@ func (e *Err) Format(s fmt.State, verb rune) {
 
 // FormatError implements interface `xerrors.Formatter`
 func (e *Err) FormatError(p xerrors.Printer) (next error) {
-	e.formatError(p, e)
+	next = e.formatError(p, e)
 	if p.Detail() {
 		return e.wrappedError
 	}
-	return nil
+	return next
 }
 
 // Parent return parent *Err.
